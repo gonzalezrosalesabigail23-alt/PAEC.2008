@@ -1,0 +1,971 @@
+<!doctype html>
+<html lang="es">
+<head>
+      <header>
+    <h1>PAEC</h1>
+  </header>
+
+  <main>
+    <section>
+      <h2>¿Qué es "El PAEC"?</h2>
+      <p>El PAEC tiene el objetivo de lograr que los planteles se transformen en escuelas abiertas y orientadoras, de esta forma el esfuerzo coordinado entre la escuela y la comunidad promoverá, a corto plazo, un aprendizaje contextualizado y significativo en el estudiantado de educación media superior, y a largo plazo favorecerá una nueva cultura educativa basada en el trabajo colaborativo y la integración de un conjunto social articulado desde el aula, la escuela y la comunidad, logrando así, la transformación propuesta en la Nueva Escuela
+Mexicana (NEM).</p>
+    </section>
+
+    <section>
+      <h2>Componentes</h2>
+      <p>• Educación: Otorga becas y apoyos para la adquisición de útiles escolares a niñas, niños y jóvenes inscritos en escuelas de primaria, secundaria y educación media superior.
+         • Salud: Ofrece acceso a atención médica y servicios de prevención de enfermedades.
+         • Inclusión Financiera y Laboral:
+           Vincula a las personas con proyectos productivos y oportunidades laborales, ayudándoles a generar ingresos sostenibles.
+        • Alimentación: Proporciona apoyo para mejorar la seguridad alimentaria de las familias</p>
+    </section>
+
+    <section>
+      <h2>Beneficios</h2>
+      <p> Familias en situación de pobreza extrema, con prioridad en comunidades rurales y urbanas marginadas.
+Requisitos: Cumplir con los criterios establecidos por la Secretaría de Bienestar, que incluyen la evaluación de la situación económica y social de las familias</p>
+
+      <h3>Controles</h3>
+      <div class="meta-list">
+        <div class="meta">⬆Aprendizaje Contextualizado: Conectar los temas de estudio con las necesidades e intereses de la comunidad local para generar aprendizajes significativos. </div>
+        <div class="meta">⬇Colaboración y Comunidad: Fomentar el trabajo colaborativo entre docentes, estudiantes, familias y la comunidad en general para crear un entorno de apoyo y un sentido de pertenencia. </div>
+        <div class="meta">⬅Uso de Progresiones de Aprendizaje: Utilizar herramientas pedagógicas, como las progresiones de aprendizaje, para guiar la reflexión hacia la solución de problemas y el cambio de comportamientos. </div>
+      </div>
+
+    </section>
+
+    <section>
+      <h2>PAEC</h2>
+      <p>Plan de Acompañamiento Emocional y Conductual (PAEC) en Chile
+Objetivo: Garantizar el bienestar emocional y conductual de estudiantes autistas y promover la inclusión social en las escuelas.
+Obligatoriedad: Es obligatorio para todos los establecimientos educacionales del país según la Ley 21.545.
+Componentes: Incluye un eje preventivo para anticipar crisis y un eje reactivo con estrategias de intervención.
+Elaboración: Se crea de manera individual, con la colaboración de la familia y el respeto por la autonomía del estudiante. 
+Programa Aula, Escuela y Comunidad (PAEC) en México
+Objetivo: Articular a la escuela con la comunidad para generar aprendizajes significativos y contextualizados, promoviendo la inclusión social y el sentido de pertenencia.
+Metodología: Se basa en la elaboración e implementación de Proyectos Escolares Comunitarios (PEC), que conectan los conocimientos con las necesidades locales.
+Enfoque: Fomenta el trabajo colaborativo y capacita a los jóvenes para ser agentes de transformación social.
+Implementación: Sigue fases que incluyen diagnóstico, diseño del proyecto, ejecución, seguimiento y retroalimentación.</p>
+      
+    </section>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PAEC — Base de Datos (IndexedDB)</title>
+  <style>
+    body{font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial;max-width:1100px;margin:20px auto;padding:16px}
+    header{display:flex;align-items:center;justify-content:space-between}
+    .card{border:1px solid #e1e1e1;border-radius:8px;padding:12px;margin:12px 0;box-shadow:0 2px 6px rgba(0,0,0,0.03)}
+    input,select,textarea,button{font:inherit;padding:8px;margin:6px 0;border:1px solid #ccc;border-radius:6px}
+    .grid{display:grid;grid-template-columns:1fr 360px;gap:16px}
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:8px;border-bottom:1px solid #eee;text-align:left}
+    .actions{display:flex;gap:8px}
+    .btn{cursor:pointer}
+    .small{font-size:0.9rem}
+    .muted{color:#666}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>PAEC — Base de Datos (IndexedDB)</h1>
+    <div class="small muted">Cliente | Visual Studio Code — abre con Live Server</div>
+  </header>
+
+  <p class="muted">Esta interfaz guarda datos localmente en tu navegador usando <strong>IndexedDB</strong>. Ideal para prototipos y para usar sin servidor. Puedes exportar/importar JSON.</p>
+
+  <div class="grid">
+    <div>
+      <section class="card">
+        <h2>Registros</h2>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button id="show-centers" class="btn">Centros</button>
+          <button id="show-programs" class="btn">Programas</button>
+          <button id="show-users" class="btn">Beneficiarios</button>
+          <button id="export-json" class="btn">Exportar JSON</button>
+          <input id="import-file" type="file" accept="application/json" />
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Listado</h2>
+        <div>
+          <input id="filter" placeholder="Buscar por nombre o localidad..." style="width:100%" />
+        </div>
+        <div id="list-area" style="margin-top:10px"></div>
+      </section>
+
+      <section class="card">
+        <h2>Export / Import</h2>
+        <p class="small muted">Exporta todos los datos a un archivo JSON. Importa JSON generado por esta app.</p>
+      </section>
+    </div>
+
+    <aside>
+      <section class="card">
+        <h3 id="form-title">Crear Centro</h3>
+        <form id="main-form">
+          <input type="hidden" id="object-type" value="centers" />
+          <input type="hidden" id="edit-id" />
+
+          <label for="name">Nombre</label>
+          <input id="name" required />
+
+          <label for="type">Tipo</label>
+          <select id="type">
+            <option value="escuela">Escuela</option>
+            <option value="aula">Aula</option>
+            <option value="comunidad">Centro comunitario</option>
+          </select>
+
+          <label for="localidad">Localidad</label>
+          <input id="localidad" />
+
+          <label for="description">Descripción / Observaciones</label>
+          <textarea id="description" rows="4"></textarea>
+
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <button type="submit" id="save-btn">Guardar</button>
+            <button type="button" id="clear-btn">Limpiar</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="card small muted">
+        <h4>Guía rápida</h4>
+        <ol>
+          <li>Selecciona la colección (Centros, Programas o Beneficiarios).</li>
+          <li>Rellena el formulario y presiona <em>Guardar</em>.</li>
+          <li>Usa <em>Exportar JSON</em> para descargar los datos.</li>
+          <li>Importa un JSON con el botón de archivo para restaurar datos.</li>
+        </ol>
+      </section>
+    </aside>
+  </div>
+
+  <script>
+
+    const DB_NAME = 'paec_db_v1'
+    const DB_VERSION = 1
+    const STORE_NAMES = ['centers','programs','users']
+
+    function openDB(){
+      return new Promise((resolve, reject) => {
+        const req = indexedDB.open(DB_NAME, DB_VERSION)
+        req.onupgradeneeded = (e) => {
+          const db = e.target.result
+          for(const s of STORE_NAMES){
+            if(!db.objectStoreNames.contains(s)){
+              db.createObjectStore(s, { keyPath: 'id', autoIncrement: true })
+            }
+          }
+        }
+        req.onsuccess = () => resolve(req.result)
+        req.onerror = () => reject(req.error)
+      })
+    }
+
+    async function addItem(storeName, item){
+      const db = await openDB()
+      return new Promise((resolve,reject)=>{
+        const tx = db.transaction(storeName, 'readwrite')
+        const store = tx.objectStore(storeName)
+        const req = store.add({ ...item, createdAt: new Date().toISOString() })
+        req.onsuccess = ()=> resolve(req.result)
+        req.onerror = ()=> reject(req.error)
+      })
+    }
+
+    async function updateItem(storeName, item){
+      const db = await openDB()
+      return new Promise((resolve,reject)=>{
+        const tx = db.transaction(storeName, 'readwrite')
+        const store = tx.objectStore(storeName)
+        const req = store.put(item)
+        req.onsuccess = ()=> resolve(req.result)
+        req.onerror = ()=> reject(req.error)
+      })
+    }
+
+    async function deleteItem(storeName, id){
+      const db = await openDB()
+      return new Promise((resolve,reject)=>{
+        const tx = db.transaction(storeName, 'readwrite')
+        const store = tx.objectStore(storeName)
+        const req = store.delete(Number(id))
+        req.onsuccess = ()=> resolve(true)
+        req.onerror = ()=> reject(req.error)
+      })
+    }
+
+    async function getAll(storeName){
+      const db = await openDB()
+      return new Promise((resolve,reject)=>{
+        const tx = db.transaction(storeName, 'readonly')
+        const store = tx.objectStore(storeName)
+        const req = store.getAll()
+        req.onsuccess = ()=> resolve(req.result)
+        req.onerror = ()=> reject(req.error)
+      })
+    }
+
+    async function getById(storeName, id){
+      const db = await openDB()
+      return new Promise((resolve,reject)=>{
+        const tx = db.transaction(storeName, 'readonly')
+        const store = tx.objectStore(storeName)
+        const req = store.get(Number(id))
+        req.onsuccess = ()=> resolve(req.result)
+        req.onerror = ()=> reject(req.error)
+      })
+    }
+
+   
+    const listArea = document.getElementById('list-area')
+    const filterInput = document.getElementById('filter')
+    const form = document.getElementById('main-form')
+    const objectTypeInput = document.getElementById('object-type')
+    const editIdInput = document.getElementById('edit-id')
+    const formTitle = document.getElementById('form-title')
+
+    document.getElementById('show-centers').addEventListener('click', ()=> switchCollection('centers'))
+    document.getElementById('show-programs').addEventListener('click', ()=> switchCollection('programs'))
+    document.getElementById('show-users').addEventListener('click', ()=> switchCollection('users'))
+
+    document.getElementById('export-json').addEventListener('click', async ()=>{
+      const payload = {}
+      for(const s of STORE_NAMES) payload[s] = await getAll(s)
+      const blob = new Blob([JSON.stringify(payload,null,2)],{type:'application/json'})
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = 'paec_export_'+new Date().toISOString().slice(0,10)+'.json'
+      a.click()
+      URL.revokeObjectURL(url)
+    })
+
+    document.getElementById('import-file').addEventListener('change', async (e)=>{
+      const file = e.target.files[0]
+      if(!file) return
+      try{
+        const text = await file.text()
+        const data = JSON.parse(text)
+        const db = await openDB()
+        const tx = db.transaction(STORE_NAMES,'readwrite')
+        for(const s of STORE_NAMES){
+          const store = tx.objectStore(s)
+          // clear store
+          const clearReq = store.clear()
+          await new Promise((r,rej)=>{clearReq.onsuccess=r;clearReq.onerror=rej})
+          // add items
+          if(Array.isArray(data[s])){
+            for(const it of data[s]) store.add(it)
+          }
+        }
+        tx.oncomplete = ()=>{
+          alert('Importación completada')
+          renderList()
+        }
+      }catch(err){alert('Error leyendo JSON: '+err.message)}
+    })
+
+    filterInput.addEventListener('input', ()=> renderList())
+
+    form.addEventListener('submit', async (e)=>{
+      e.preventDefault()
+      const type = objectTypeInput.value
+      const id = editIdInput.value
+      const name = document.getElementById('name').value.trim()
+      const item = {
+        name,
+        type: document.getElementById('type').value,
+        localidad: document.getElementById('localidad').value.trim(),
+        description: document.getElementById('description').value.trim(),
+        updatedAt: new Date().toISOString()
+      }
+
+      try{
+        if(id){
+          item.id = Number(id)
+          await updateItem(type, item)
+          alert('Registro actualizado')
+        }else{
+          await addItem(type, item)
+          alert('Registro creado')
+        }
+        clearForm()
+        renderList()
+      }catch(err){alert('Error al guardar: '+err.message)}
+    })
+
+    document.getElementById('clear-btn').addEventListener('click', clearForm)
+
+    function clearForm(){
+      form.reset()
+      editIdInput.value = ''
+      formTitle.textContent = 'Crear Centro'
+      objectTypeInput.value = 'centers'
+    }
+
+    async function switchCollection(name){
+      objectTypeInput.value = name
+      editIdInput.value = ''
+      form.reset()
+      formTitle.textContent = ({centers:'Crear Centro', programs:'Crear Programa', users:'Crear Beneficiario'})[name] || 'Crear'
+      renderList()
+    }
+
+    async function renderList(){
+      const storeName = objectTypeInput.value
+      const items = await getAll(storeName)
+      const q = filterInput.value.trim().toLowerCase()
+      const filtered = items.filter(it=>{
+        if(!q) return true
+        return (it.name||'').toLowerCase().includes(q) || (it.localidad||'').toLowerCase().includes(q) || (it.description||'').toLowerCase().includes(q)
+      })
+
+      if(filtered.length===0){
+        listArea.innerHTML = '<div class="muted">No hay registros</div>'
+        return
+      }
+
+      let html = '<table><thead><tr><th>Nombre</th><th>Tipo/Localidad</th><th>Acciones</th></tr></thead><tbody>'
+      for(const it of filtered){
+        html += <tr><td><strong>${escapeHtml(it.name||'')}</strong><div class="small muted">Creado: ${it.createdAt?it.createdAt.slice(0,10):''}</div></td><td class="small">${escapeHtml(it.type||'')}<br>${escapeHtml(it.localidad||'')}</td><td class="actions">;
+        html += <button onclick="onEdit('${storeName}',${it.id})" class="btn">Editar</button>
+        html += <button onclick="onDelete('${storeName}',${it.id})" class="btn">Eliminar</button>
+        html += </td></tr>
+      }
+      html += '</tbody></table>'
+      listArea.innerHTML = html
+    }
+
+    window.onEdit = async (storeName,id)=>{
+      const it = await getById(storeName,id)
+      if(!it) return alert('Registro no encontrado')
+      objectTypeInput.value = storeName
+      editIdInput.value = it.id
+      document.getElementById('name').value = it.name||''
+      document.getElementById('type').value = it.type||''
+      document.getElementById('localidad').value = it.localidad||''
+      document.getElementById('description').value = it.description||''
+      formTitle.textContent = 'Editar — ' + (it.name||'')
+      renderList()
+    }
+
+    window.onDelete = async (storeName,id)=>{
+      if(!confirm('Eliminar registro?')) return
+      await deleteItem(storeName,id)
+      renderList()
+    }
+
+    function escapeHtml(str){
+      return String(str).replace(/[&<>\"]/g, s=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[s]))
+    }
+
+  
+    async function seedIfEmpty(){
+      const centers = await getAll('centers')
+      if(centers.length===0){
+        await addItem('centers',{name:'Escuela Primaria Benito Juárez', type:'escuela', localidad:'Col. Centro', description:'Centro con programa de inclusión educativa'})
+        await addItem('centers',{name:'Aula de Apoyo PAEC - Secundaria 12', type:'aula', localidad:'Zona Norte', description:'Aula especializada en adaptación curricular'})
+      }
+      const programs = await getAll('programs')
+      if(programs.length===0){
+        await addItem('programs',{name:'Programa de Sensibilización', type:'taller', localidad:'Municipal', description:'Talleres para docentes y familias'})
+        await addItem('programs',{name:'Reforzamiento Lector', type:'programa', localidad:'Regional', description:'Lectura inclusiva adaptada'})
+      }
+      const users = await getAll('users')
+      if(users.length===0){
+        await addItem('users',{name:'María López', type:'estudiante', localidad:'Col. Centro', description:'Beneficiaria de apoyo 1:1'})
+      }
+    }
+
+    (async ()=>{
+      await seedIfEmpty()
+      switchCollection('centers')
+    })()
+
+  </script>
+</body>
+</html>
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PAEC - Inclusión Social (Base de Datos)</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: #f3f6fa;
+      color: #c41c1c;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #003366;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background: #0879eb;
+      color: white;
+    }
+    .btn {
+      background: #0078d7;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 5px 0;
+    }
+    .btn:hover {
+      background: #005fa3;
+    }
+  </style>
+</head>
+<body>
+  <h1>Programa Aula - Escuela - Comunidad (PAEC)</h1>
+  <div class="container">
+    <p><strong>Objetivo general:</strong> Promover la inclusión social y educativa fortaleciendo la relación entre docentes, estudiantes, familias y comunidad.</p>
+
+    <button class="btn" onclick="agregarDatos()">Cargar datos PAEC</button>
+    <button class="btn" onclick="mostrarDatos()">Mostrar base de datos</button>
+
+    <table id="tablaDatos">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Acción</th>
+          <th>Participantes</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    
+    let db;
+    const request = indexedDB.open("PAEC_DB", 1);
+
+    request.onupgradeneeded = function (event) {
+      db = event.target.result;
+      const store = db.createObjectStore("acciones", { keyPath: "id", autoIncrement: true });
+      store.createIndex("nombre", "nombre", { unique: false });
+      store.createIndex("accion", "accion", { unique: false });
+      store.createIndex("participantes", "participantes", { unique: false });
+    };
+
+    request.onsuccess = function (event) {
+      db = event.target.result;
+      console.log("Base de datos abierta correctamente.");
+    };
+
+    request.onerror = function (event) {
+      console.error("Error al abrir la base de datos:", event.target.error);
+    };
+
+  
+    const datosIniciales = [
+      {
+        nombre: "Taller de inclusión educativa",
+        accion: "Capacitación para docentes en estrategias de inclusión.",
+        participantes: "Docentes y orientadores"
+      },
+      {
+        nombre: "Campaña comunidad inclusiva",
+        accion: "Charlas y actividades de sensibilización en escuelas y colonias.",
+        participantes: "Estudiantes, padres y comunidad"
+      },
+      {
+        nombre: "Programa de tutoría social",
+        accion: "Acompañamiento a estudiantes en riesgo de exclusión escolar.",
+        participantes: "Docentes y voluntarios"
+      },
+      {
+        nombre: "Foro educativo PAEC",
+        accion: "Espacio de diálogo entre escuela y comunidad sobre inclusión.",
+        participantes: "Autoridades, familias y alumnos"
+      }
+    ];
+
+    function agregarDatos() {
+      const transaccion = db.transaction(["acciones"], "readwrite");
+      const store = transaccion.objectStore("acciones");
+      datosIniciales.forEach(dato => store.add(dato));
+      transaccion.oncomplete = () => alert("Datos agregados correctamente a la base de datos.");
+    }
+
+    function mostrarDatos() {
+      const tabla = document.querySelector("#tablaDatos tbody");
+      tabla.innerHTML = "";
+      const transaccion = db.transaction(["acciones"], "readonly");
+      const store = transaccion.objectStore("acciones");
+      const request = store.openCursor();
+      request.onsuccess = function (event) {
+        const cursor = event.target.result;
+        if (cursor) {
+          const fila = `
+            <tr>
+              <td>${cursor.value.id}</td>
+              <td>${cursor.value.nombre}</td>
+              <td>${cursor.value.accion}</td>
+              <td>${cursor.value.participantes}</td>
+            </tr>`;
+          tabla.innerHTML += fila;
+          cursor.continue();
+        }
+      };
+    }
+  </script>
+  <section style="text-align:center; margin:30px 0;">
+  <h2 style="color:#1E3A8A;">Conoce más sobre el PAEC</h2>
+  <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:10px; box-shadow:0 4px 15px rgba(0,0,0,0.3);">
+    <iframe src="https://www.youtube.com/embed/F0RKpzJ2FKU"
+      title="Video sobre el PAEC"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
+      style="position:absolute; top:0; left:0; width:100%; height:100%;">
+    </iframe>
+  </div>
+</section>
+</body>
+</html>
+
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PAEC — Inclusión Social</title>
+  <meta name="description" content="Página informativa sobre PAEC e inclusión social. Imágenes como hipervínculos a páginas de apoyo." />
+  <style>
+    :root{
+      --bg:#2a1d63;
+      --card:#1c9cc4;
+      --accent:#0ae92f00;
+      --muted:#000000;
+      --glass: rgba(44, 11, 233, 0.7);
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:linear-gradient(180deg,var(--bg),#eaf6f2);color:#123;}
+    .container{max-width:1100px;margin:32px auto;padding:24px}
+    header{display:flex;gap:16px;align-items:center}
+    .logo{width:78px;height:78px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#2aa37a);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:18px}
+    h1{margin:0;font-size:26px}
+    p.lead{color:var(--muted);margin-top:6px}
+
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin-top:22px}
+    .card{background:var(--card);border-radius:14px;box-shadow:0 6px 20px rgba(21, 59, 52, 0.06);overflow:hidden;border:1px solid rgba(64, 105, 101, 0.06)}
+    .card a{display:block;text-decoration:none;color:inherit}
+    .card .thumb{width:100%;height:160px;object-fit:cover;display:block}
+    .card .content{padding:14px}
+    .card h3{margin:0 0 8px 0;font-size:18px}
+    .card p{margin:0;color:var(--muted);font-size:14px}
+
+    footer{margin-top:26px;color:var(--muted);font-size:13px}
+
+
+    @media (max-width:520px){header{flex-direction:column;align-items:flex-start}.logo{width:64px;height:64px}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">PAEC</div>
+      <div>
+        <h1>PAEC — Inclusión Social</h1>
+        <p class="lead">Recursos y páginas de apoyo.</p>
+      </div>
+    </header>
+
+  
+    <section class="grid">
+
+      <!-- Tarjeta 1: UNESCO (ejemplo) -->
+      <article class="card">
+        <a href="https://www.unesco.org/es/education/inclusion" target="_blank" rel="noopener noreferrer" title="Ir a UNESCO - Inclusión">
+          <!-- imagen obtenida dinámicamente según el tema (sustituir si se desea una imagen local) -->
+          <img class="thumb" src="https://impulso06.com/wp-content/uploads/2023/09/La-educacion-inclusiva-en-el-aula-utopia-o-realidad.png" alt="Imagen representativa de inclusión educativa"/>
+          <div class="content">
+            <h3>UNESCO — Inclusión en la educación</h3>
+            <p>Informes y guías internacionales sobre políticas inclusivas.</p>
+          </div>
+        </a>
+      </article>
+
+    
+      <article class="card">
+        <a href="https://www.unicef.org/careers/es/esferas-funcionales-de-unicef-programas" target="_blank" rel="noopener noreferrer" title="Ir a UNICEF">
+          <img class="thumb" src="https://madreshoy.com/wp-content/uploads/2019/11/ni%C3%B1os-en-la-escuela.jpg" alt="Niñas y niños en la escuela"/>
+          <div class="content">
+            <h3>UNICEF — Programas y recursos</h3>
+            <p>Proyectos y materiales sobre inclusión social y educativa para la infancia.</p>
+          </div>
+        </a>
+      </article>
+
+    
+      <article class="card">
+        <a href="https://www.gob.mx/sep/acciones-y-programas/inclusion-y-equidad-178423" target="_blank" rel="noopener noreferrer" title="Ir a SEP México">
+          <img class="thumb" src="https://thumbs.dreamstime.com/z/interior-de-un-aula-escolar-moderna-347531008.jpg" alt="Aula escolar"/>
+          <div class="content">
+            <h3>SEP (México) — Inclusión educativa</h3>
+            <p>Información y normativa nacional para promover la inclusión en escuelas mexicanas.</p>
+          </div>
+        </a>
+      </article>
+
+      
+      <article class="card">
+        <a href="https://commission.europa.eu/eu-regional-and-urban-development/topics/social-inclusion_es" target="_blank" rel="noopener noreferrer" title="Ir a European Agency">
+          <img class="thumb" src="https://cdn.pixabay.com/photo/2023/07/05/20/12/ai-generated-8109142_1280.jpg" alt="Accesibilidad y comunidad"/>
+          <div class="content">
+            <h3>European Agency — Buenas prácticas</h3>
+            <p>Recopilación de estrategias eficaces para la inclusión escolar y social.</p>
+          </div>
+        </a>
+      </article>
+
+    
+      <article class="card">
+        <a href="https://sites.google.com/view/programapaecalexander/p%C3%A1gina-principal" target="_self" title="Ir a la página interna PAEC">
+          <img class="thumb" src="https://i.pinimg.com/originals/b8/a1/e1/b8a1e16a860887f45caaa964fd787577.jpg" src="" alt="Comunidad educativa"/>
+          <div class="content">
+            <h3>PAEC — Recursos del proyecto</h3>
+            <p>Materiales, actividades y guías creadas específicamente para el PAEC (archivo local).</p>
+          </div>
+        </a>
+      </article>
+
+    </section>
+
+    <footer>
+      <p>Consejo: para usar imágenes locales en lugar de las URLs dinámicas de Unsplash, coloca tus archivos en la carpeta del proyecto (por ejemplo <code>./img/inclusion1.jpg</code>) y cambia el atributo <code>src</code> de cada <code>&lt;img&gt;</code> por la ruta relativa.</p>
+      <p>Si quieres que genere también <strong>paec.html</strong> (página interna) o que adapte la paleta de colores, dimensiones o el texto a tu presentación, dime y lo integro.</p>
+    </footer>
+  </div>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proyecto PAEC - Plataforma Educativa</title>
+
+
+<style>
+   
+    body {
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(135deg, #004aad, #0099ff);
+        margin: 0;
+        padding: 0;
+        color: #000000;
+    }
+
+    header {
+        background: #237947ef;
+        padding: 25px;
+        text-align: center;
+        backdrop-filter: blur(10px);
+        color: white;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+    }
+
+    h1 {
+        font-size: 40px;
+        margin: 0;
+        font-weight: 700;
+        letter-spacing: 1px;
+    }
+
+    .section {
+        background: rgb(67, 104, 134);
+        margin: 25px;
+        padding: 25px;
+        border-radius: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        animation: fadeIn 0.8s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+        color: #000000;
+        font-size: 28px;
+    }
+
+    ul li {
+        margin-bottom: 10px;
+    }
+
+    
+    .video-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 15px;
+    }
+
+    iframe {
+        width: 80%;
+        height: 350px;
+        border-radius: 15px;
+        border: none;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+
+    .enlaces {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        margin-top: 20px;
+        flex-wrap: wrap;
+    }
+
+    .enlace-img {
+        width: 180px;
+        border-radius: 15px;
+        cursor: pointer;
+        transition: 0.4s;
+        border: 4px solid #07788b;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    .enlace-img:hover {
+        transform: scale(1.1);
+        border-color: #0099ff;
+    }
+
+  
+    .tabla-contenido {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    .tabla-contenido th {
+        background: #6381a8;
+        color: #190e49;
+        padding: 12px;
+        font-size: 18px;
+    }
+
+    .tabla-contenido td {
+        padding: 10px;
+        border: 1px solid #ddd;
+    }
+
+    .tabla-contenido tr:nth-child(even) {
+        background: #f2f2f2;
+    }
+
+    /* BOTONES */
+    .btn {
+        display: inline-block;
+        padding: 12px 20px;
+        background: #004aad;
+        color: white;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: 0.3s;
+        margin-top: 15px;
+    }
+
+    .btn:hover {
+        background: #0099ff;
+        transform: scale(1.05);
+    }
+
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>PAEC – Plataforma de Aprendizaje y Evaluación Continua</h1>
+    <p>Interfaz educativa moderna, accesible e interactiva ✨</p>
+</header>
+
+<!-- BASE DE DATOS -->
+<script>
+    const baseDatosUsuarios = [
+        { id: 1, nombre: "Ana", rol: "Estudiante", acceso: "Básico" },
+        { id: 2, nombre: "Cristian", rol: "Docente", acceso: "Avanzado" },
+        { id: 3, nombre: "Lugo", rol: "Directora", acceso: "Administrativo" }
+    ];
+
+    function mostrarTablaUsuarios() {
+        let tabla = document.getElementById("tablaUsuarios");
+
+        baseDatosUsuarios.forEach(usuario => {
+            let fila = `
+                <tr>
+                    <td>${usuario.id}</td>
+                    <td>${usuario.nombre}</td>
+                    <td>${usuario.rol}</td>
+                    <td>${usuario.acceso}</td>
+                </tr>
+            `;
+            tabla.innerHTML += fila;
+        });
+    }
+
+    window.onload = mostrarTablaUsuarios;
+</script>
+
+<!-- SECCIÓN 1 -->
+<div class="section">
+    <h2>¿Qué es el PAEC?</h2>
+    <p>
+        El PAEC (Programa de Acompañamiento Educativo y Comunitario) es una
+        plataforma diseñada para mejorar los procesos educativos mediante recursos
+        digitales, videos explicativos, evaluaciones dinámicas y herramientas de apoyo
+        tanto para docentes como estudiantes.
+    </p>
+
+    <p>
+        Esta página integra contenidos multimedia, enlaces a instituciones oficiales
+        y una base de datos simulada que permite visualizar roles dentro del sistema.
+    </p>
+</div>
+
+<!-- NECESIDADES -->
+<div class="section">
+    <h2>Análisis de necesidades de los usuarios</h2>
+    <ul>
+        <li>Interfaz clara, accesible y visualmente atractiva.</li>
+        <li>Videos visibles sin salir de la página.</li>
+        <li>
+            Navegación intuitiva mediante imágenes clicables e interactivas.
+        </li>
+        <li>Base de datos simple para identificar roles dentro del PAEC.</li>
+        <li>Acceso rápido a recursos oficiales.</li>
+        <li>Compatibilidad con dispositivos móviles.</li>
+    </ul>
+</div>
+
+<!-- COMPORTAMIENTO -->
+<div class="section">
+    <h2>¿Cómo interactúa esta página con el usuario?</h2>
+    <ul>
+        <li>Imágenes que reaccionan al pasar el mouse.</li>
+        <li>Videos integrados con reproducción inmediata.</li>
+        <li>Tabla generada automáticamente desde la base de datos.</li>
+        <li>Efectos visuales y transiciones suaves.</li>
+        <li>Diseño responsivo para celular, tablet o computadora.</li>
+    </ul>
+</div>
+
+<section style="text-align:center; margin:30px 0;">
+<h2 style="color:#1E3A8A;">Conoce más sobre el PAEC</h2>
+<iframe width="640" height="360" 
+    src="https://www.youtube.com/embed/rgOni6u1em8"
+    title="Video sobre el PAEC"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen
+    style="border-radius:10px; box-shadow:0 4px 15px rgba(0,0,0,0.3);">
+</iframe>
+</section>
+
+<!-- ENLACES -->
+<div class="section">
+    <h2>Recursos oficiales y de apoyo</h2>
+    <p>Haz clic en las imágenes para visitar sitios importantes:</p>
+
+    <div class="enlaces">
+        <a href="https://www.sep.gob.mx" target="_blank">
+            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="enlace-img">
+        </a>
+
+        <a href="https://www.unicef.org/es" target="_blank">
+            <img src="https://cdn-icons-png.flaticon.com/512/1048/1048953.png" class="enlace-img">
+        </a>
+
+        <a href="https://educalab.es" target="_blank">
+            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135810.png" class="enlace-img">
+        </a>
+    </div>
+</div>
+
+<div class="section">
+    <h2>Base de datos de usuarios (simulación)</h2>
+
+    <table class="tabla-contenido">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Rol</th>
+                <th>Nivel de acceso</th>
+            </tr>
+        </thead>
+        <tbody id="tablaUsuarios"></tbody>
+    </table>
+</div>
+
+<!-- EVALUACIÓN -->
+<div class="section">
+    <h2>Métodos de evaluación del PAEC</h2>
+    <ul>
+        <li>Encuestas de satisfacción digital.</li>
+        <li>Evaluaciones en línea automatizadas.</li>
+        <li>Retroalimentación directa de estudiantes.</li>
+        <li>Pruebas de accesibilidad web.</li>
+        <li>Analítica educativa para medir progreso.</li>
+    </ul>
+
+    <a class="btn" href="#top">Regresar arriba</a>
+</div>
+
+</body>
+</html>
+
+<body style="text-align: center;">
+    <h1>Mi página web</h1>
+    <p></p>
+</body>
+
+
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PAEC – Inclusión Educativa y Comunitaria</title>
+
+<style>
